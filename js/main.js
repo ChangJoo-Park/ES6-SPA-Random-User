@@ -1,8 +1,8 @@
 /*
 * @Author: changjoopark
 * @Date:   2016-05-10 17:50:32
-* @Last Modified by:   changjoopark
-* @Last Modified time: 2016-05-10 19:35:30
+* @Last Modified by:   ChangJoo Park
+* @Last Modified time: 2016-05-10 20:00:16
 */
 
 'use strict';
@@ -19,12 +19,21 @@ document.getElementById('reloadContacts').addEventListener('click', ()=> {
 });
 
 document.getElementById('searchContact').addEventListener('click', ()=> {
-  console.log("Hi");
+  const queryText = document.getElementById('searchContactQuery');
+  service.findByName(queryText.value).then((contacts)=>{
+    let html = '';
+    contacts.forEach((contact)=>{
+      let contactDOM = new ContactDOM(contact);
+      html += contactDOM.domObject;
+    });
+    document.getElementById('contacts').innerHTML = html;
+    queryText.value = '';
+  });
 });
 
 function loadContact() {
   service.findAll().then((contacts)=>{
-    let html = "";
+    let html = '';
     contacts.forEach((contact)=>{
       let contactDOM = new ContactDOM(contact);
       html += contactDOM.domObject;

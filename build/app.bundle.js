@@ -47,8 +47,8 @@
 	/*
 	* @Author: changjoopark
 	* @Date:   2016-05-10 17:50:32
-	* @Last Modified by:   changjoopark
-	* @Last Modified time: 2016-05-10 19:35:30
+	* @Last Modified by:   ChangJoo Park
+	* @Last Modified time: 2016-05-10 20:00:16
 	*/
 	
 	'use strict';
@@ -75,12 +75,21 @@
 	});
 	
 	document.getElementById('searchContact').addEventListener('click', function () {
-	  console.log("Hi");
+	  var queryText = document.getElementById('searchContactQuery');
+	  service.findByName(queryText.value).then(function (contacts) {
+	    var html = '';
+	    contacts.forEach(function (contact) {
+	      var contactDOM = new _contactDom2.default(contact);
+	      html += contactDOM.domObject;
+	    });
+	    document.getElementById('contacts').innerHTML = html;
+	    queryText.value = '';
+	  });
 	});
 	
 	function loadContact() {
 	  service.findAll().then(function (contacts) {
-	    var html = "";
+	    var html = '';
 	    contacts.forEach(function (contact) {
 	      var contactDOM = new _contactDom2.default(contact);
 	      html += contactDOM.domObject;
@@ -96,8 +105,8 @@
 	/*
 	* @Author: changjoopark
 	* @Date:   2016-05-10 17:57:01
-	* @Last Modified by:   changjoopark
-	* @Last Modified time: 2016-05-10 18:50:35
+	* @Last Modified by:   ChangJoo Park
+	* @Last Modified time: 2016-05-10 20:02:36
 	*/
 	
 	'use strict';
@@ -144,6 +153,29 @@
 	  return new Promise(function (resolve, reject) {
 	    if (contacts) {
 	      resolve(contacts);
+	    } else {
+	      reject("No Contacts");
+	    }
+	  });
+	};
+	
+	var findByName = exports.findByName = function findByName(queryText) {
+	  return new Promise(function (resolve, reject) {
+	    console.log(queryText);
+	    if (queryText.trim() === '') {
+	      resolve(contacts);
+	    } else if (queryText.length > 0) {
+	      (function () {
+	        console.log('queryText has exists');
+	        var q = queryText.trim();
+	        var result = [];
+	        contacts.forEach(function (contact) {
+	          if (contact.firstName === q || contact.lastName === q) {
+	            result.push(contact);
+	          }
+	        });
+	        resolve(result);
+	      })();
 	    } else {
 	      reject("No Contacts");
 	    }

@@ -1,8 +1,8 @@
 /*
 * @Author: changjoopark
 * @Date:   2016-05-10 17:57:01
-* @Last Modified by:   changjoopark
-* @Last Modified time: 2016-05-10 18:50:35
+* @Last Modified by:   ChangJoo Park
+* @Last Modified time: 2016-05-10 20:02:36
 */
 
 'use strict';
@@ -56,6 +56,25 @@ let contacts = [
 export let findAll = () => new Promise((resolve, reject) => {
   if(contacts) {
     resolve(contacts);
+  } else {
+    reject("No Contacts");
+  }
+});
+
+export let findByName = (queryText) => new Promise((resolve, reject) => {
+  console.log(queryText)
+  if(queryText.trim() === '') {
+    resolve(contacts);
+  } else if(queryText.length > 0) {
+    console.log('queryText has exists');
+    const q = queryText.trim();
+    let result = [];
+    contacts.forEach((contact)=>{
+      if(contact.firstName === q || contact.lastName === q) {
+        result.push(contact);
+      }
+    });
+    resolve(result);
   } else {
     reject("No Contacts");
   }
