@@ -110,7 +110,7 @@
 	* @Author: changjoopark
 	* @Date:   2016-05-10 17:57:01
 	* @Last Modified by:   ChangJoo Park
-	* @Last Modified time: 2016-05-10 20:58:36
+	* @Last Modified time: 2016-05-10 21:47:29
 	*/
 	
 	'use strict';
@@ -118,68 +118,26 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var contacts = [{
-	  "id": 1,
-	  "firstName": "John",
-	  "lastName": "Smith",
-	  "age": 25,
-	  "address": {
-	    "streetAddress": "21 2nd Street",
-	    "city": "New York",
-	    "state": "NY",
-	    "postalCode": "10021"
-	  },
-	  "phoneNumber": [{
-	    "type": "home",
-	    "number": "212 555-1234"
-	  }, {
-	    "type": "fax",
-	    "number": "646 555-4567"
-	  }]
-	}, {
-	  "id": 2,
-	  "firstName": "ChangJoo",
-	  "lastName": "Park",
-	  "age": 29,
-	  "address": {
-	    "streetAddress": "Ringslebenstr. 2",
-	    "city": "Berlin",
-	    "state": "BR",
-	    "postalCode": "12353"
-	  },
-	  "phoneNumber": [{
-	    "type": "home",
-	    "number": "212 555-1234"
-	  }]
-	}, {
-	  "id": 3,
-	  "firstName": "ABCD",
-	  "lastName": "HHHH",
-	  "age": 79,
-	  "address": {
-	    "streetAddress": "Somewhere",
-	    "city": "London",
-	    "state": "GB",
-	    "postalCode": "123456"
-	  },
-	  "phoneNumber": [{
-	    "type": "home",
-	    "number": "212 555-1234"
-	  }, {
-	    "type": "fax",
-	    "number": "222 555-1234"
-	  }, {
-	    "type": "cell phone",
-	    "number": "222 555-1234"
-	  }]
-	}];
+	var contacts = undefined;
+	// export let getContacts = ()=> new Promise((resolve, reject) => {
+	
+	// });
 	
 	var findAll = exports.findAll = function findAll() {
 	  return new Promise(function (resolve, reject) {
-	    if (contacts) {
-	      resolve(contacts);
+	    if (contacts === undefined) {
+	      getJSON('http://api.randomuser.me/?results=25').then(function (data) {
+	        console.log(data);
+	        contacts = data;
+	        resolve(contacts.results);
+	      });
 	    } else {
-	      reject("No Contacts");
+	      console.log("Hi");
+	      if (contacts) {
+	        resolve(contacts.results);
+	      } else {
+	        reject("No Contacts");
+	      }
 	    }
 	  });
 	};
@@ -187,25 +145,46 @@
 	var findByName = exports.findByName = function findByName(queryText) {
 	  return new Promise(function (resolve, reject) {
 	    if (queryText.trim() === '') {
-	      resolve(contacts);
+	      resolve(contacts.results);
 	    } else if (queryText.length > 0) {
 	      (function () {
 	        var q = queryText.trim().toLowerCase();
 	        var result = [];
-	        contacts.forEach(function (contact) {
-	          if (contact.firstName.toLowerCase().match(q) || contact.lastName.toLowerCase().match(q)) {
+	        contacts.results.forEach(function (contact) {
+	          if (contact.name.first.toLowerCase().match(q) || contact.name.last.toLowerCase().match(q)) {
 	            result.push(contact);
 	          }
 	        });
 	        if (result.length > 0) {
 	          resolve(result);
 	        } else {
-	          reject({ message: "Can't find mathched : " + queryText });
+	          reject({
+	            message: 'Can\'t find mathched : ' + queryText
+	          });
 	        }
 	      })();
 	    }
 	  });
 	};
+	
+	function getJSON(url) {
+	  'use strict';
+	
+	  var xhr = new XMLHttpRequest();
+	  var d = Promise.defer();
+	  xhr.onreadystatechange = function () {
+	    if (xhr.readyState === 4) {
+	      if (xhr.status === 200) {
+	        d.resolve(JSON.parse(xhr.responseText));
+	      } else {
+	        d.reject(xhr.responseText);
+	      }
+	    }
+	  };
+	  xhr.open('GET', url);
+	  xhr.send();
+	  return d.promise;
+	}
 
 /***/ },
 /* 2 */
@@ -215,7 +194,7 @@
 	* @Author: changjoopark
 	* @Date:   2016-05-10 18:09:49
 	* @Last Modified by:   ChangJoo Park
-	* @Last Modified time: 2016-05-10 21:19:48
+	* @Last Modified time: 2016-05-10 21:47:18
 	*/
 	
 	'use strict';
@@ -238,20 +217,21 @@
 	  _createClass(ContactDOM, [{
 	    key: 'domBasicProfile',
 	    value: function domBasicProfile() {
-	      var name = this.contact.firstName + ' ' + this.contact.lastName;
-	      var age = '(' + this.contact.age + ')';
-	      return '<h3>' + name + ' ' + age + '</h3>';
+	      var name = this.contact.name;
+	      return '<h3>' + name.first + ' ' + name.last + '</h3>';
 	    }
 	  }, {
 	    key: 'domAddress',
 	    value: function domAddress() {
-	      var address = this.contact.address;
-	      return '<div class=\'address\'>\n      <p>City : ' + address.city + '</p>\n      <p>Postal Code : ' + address.postalCode + '</p>\n      <p>State : ' + address.state + '</p>\n      <p>Street : ' + address.streetAddress + '</p>\n    </div>';
+	      var address = this.contact.location;
+	      return '<div class=\'address\'>\n      <p>City : ' + address.city + '</p>\n      <p>Postal Code : ' + address.postcode + '</p>\n      <p>State : ' + address.state + '</p>\n      <p>Street : ' + address.street + '</p>\n    </div>';
 	    }
 	  }, {
 	    key: 'domPhone',
 	    value: function domPhone() {
-	      var phones = this.contact.phoneNumber;
+	      var phones = [];
+	      phones.push({ type: 'phone', number: this.contact.phone });
+	      phones.push({ type: 'cell', number: this.contact.cell });
 	      var html = '<div class="phones"><ul>';
 	      phones.forEach(function (phone) {
 	        var dom = '<li>' + phone.type + ' : ' + phone.number + '</li>';
@@ -266,7 +246,7 @@
 	      var nameDOM = this.domBasicProfile();
 	      var addressDOM = this.domAddress();
 	      var phoneDOM = this.domPhone();
-	      var html = '<div class=\'contact-' + this.contact.id + ' col-sm-4 col-md-3\'>\n      <div class="thumbnail">\n        <img src="http://lorempixel.com/400/200/"/>\n        <div class="caption">\n          ' + nameDOM + '\n        </div>\n        ' + addressDOM + '\n        ' + phoneDOM + '\n      </div>\n    </div>';
+	      var html = '<div class=\'contact-' + this.contact.id + ' col-sm-6 col-md-4\'>\n      <div class="thumbnail">\n        <img src="' + this.contact.picture.large + '"/>\n        <div class="caption">\n          ' + nameDOM + '\n        </div>\n        ' + addressDOM + '\n        ' + phoneDOM + '\n      </div>\n    </div>';
 	      return html;
 	    }
 	  }]);
