@@ -48,7 +48,7 @@
 	* @Author: changjoopark
 	* @Date:   2016-05-10 17:50:32
 	* @Last Modified by:   ChangJoo Park
-	* @Last Modified time: 2016-05-10 20:24:57
+	* @Last Modified time: 2016-05-10 20:49:58
 	*/
 	
 	'use strict';
@@ -66,43 +66,41 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	document.addEventListener('DOMContentLoaded', function () {
-	  loadContact();
+	  service.findAll().then(function (contacts) {
+	    loadContact(contacts);
+	  });
 	});
 	
 	//  Click Contact Reload button
 	document.getElementById('reloadContacts').addEventListener('click', function () {
 	  document.getElementById('flash').innerHTML = '';
 	  document.getElementById('searchContactQuery').value = '';
-	  loadContact();
+	  service.findAll().then(function (contacts) {
+	    loadContact(contacts);
+	  });
 	});
 	
 	document.getElementById('searchForm').addEventListener('submit', function (event) {
 	  event.preventDefault();
 	  document.getElementById('flash').innerHTML = '';
+	
 	  var queryText = document.getElementById('searchContactQuery');
 	  service.findByName(queryText.value).then(function (contacts) {
-	    var html = '';
-	    contacts.forEach(function (contact) {
-	      var contactDOM = new _contactDom2.default(contact);
-	      html += contactDOM.domObject;
-	    });
-	    document.getElementById('contacts').innerHTML = html;
+	    loadContact(contacts);
 	  }).catch(function (error) {
 	    document.getElementById('flash').innerHTML = error.message;
 	    queryText.value = "";
 	  });
 	});
 	
-	function loadContact() {
-	  service.findAll().then(function (contacts) {
-	    var html = '';
-	    contacts.forEach(function (contact) {
-	      var contactDOM = new _contactDom2.default(contact);
-	      html += contactDOM.domObject;
-	    });
-	    document.getElementById('contacts').innerHTML = html;
+	function loadContact(contacts) {
+	  var html = '';
+	  contacts.forEach(function (contact) {
+	    var contactDOM = new _contactDom2.default(contact);
+	    html += contactDOM.domObject;
 	  });
-	}
+	  document.getElementById('contacts').innerHTML = html;
+	};
 
 /***/ },
 /* 1 */
@@ -112,7 +110,7 @@
 	* @Author: changjoopark
 	* @Date:   2016-05-10 17:57:01
 	* @Last Modified by:   ChangJoo Park
-	* @Last Modified time: 2016-05-10 20:25:30
+	* @Last Modified time: 2016-05-10 20:58:36
 	*/
 	
 	'use strict';
@@ -153,6 +151,27 @@
 	    "type": "home",
 	    "number": "212 555-1234"
 	  }]
+	}, {
+	  "id": 3,
+	  "firstName": "ABCD",
+	  "lastName": "HHHH",
+	  "age": 79,
+	  "address": {
+	    "streetAddress": "Somewhere",
+	    "city": "London",
+	    "state": "GB",
+	    "postalCode": "123456"
+	  },
+	  "phoneNumber": [{
+	    "type": "home",
+	    "number": "212 555-1234"
+	  }, {
+	    "type": "fax",
+	    "number": "222 555-1234"
+	  }, {
+	    "type": "cell phone",
+	    "number": "222 555-1234"
+	  }]
 	}];
 	
 	var findAll = exports.findAll = function findAll() {
@@ -174,7 +193,7 @@
 	        var q = queryText.trim().toLowerCase();
 	        var result = [];
 	        contacts.forEach(function (contact) {
-	          if (contact.firstName.toLowerCase() === q || contact.lastName.toLowerCase() === q) {
+	          if (contact.firstName.toLowerCase().match(q) || contact.lastName.toLowerCase().match(q)) {
 	            result.push(contact);
 	          }
 	        });

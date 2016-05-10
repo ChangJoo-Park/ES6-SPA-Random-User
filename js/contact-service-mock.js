@@ -2,7 +2,7 @@
 * @Author: changjoopark
 * @Date:   2016-05-10 17:57:01
 * @Last Modified by:   ChangJoo Park
-* @Last Modified time: 2016-05-10 20:25:30
+* @Last Modified time: 2016-05-10 20:58:36
 */
 
 'use strict';
@@ -49,6 +49,33 @@ let contacts = [
      "number": "212 555-1234"
    },
   ]
+},
+{
+  "id": 3,
+  "firstName": "ABCD",
+  "lastName": "HHHH",
+  "age": 79,
+  "address":
+  {
+     "streetAddress": "Somewhere",
+     "city": "London",
+     "state": "GB",
+     "postalCode": "123456"
+  },
+  "phoneNumber": [
+   {
+     "type": "home",
+     "number": "212 555-1234"
+   },
+   {
+     "type": "fax",
+     "number": "222 555-1234"
+   },
+   {
+     "type": "cell phone",
+     "number": "222 555-1234"
+   },
+  ]
 }
 
 ];
@@ -68,8 +95,8 @@ export let findByName = (queryText) => new Promise((resolve, reject) => {
     const q = queryText.trim().toLowerCase();
     let result = [];
     contacts.forEach((contact)=>{
-      if(contact.firstName.toLowerCase() === q ||
-         contact.lastName.toLowerCase() === q) {
+      if(contact.firstName.toLowerCase().match(q)  ||
+         contact.lastName.toLowerCase().match(q)) {
         result.push(contact);
       }
     });

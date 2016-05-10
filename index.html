@@ -6,10 +6,10 @@
     </head>
     <body>
       <form id="searchForm">
-        <input id="searchContactQuery" type="text">
+        <input type="text" id="searchContactQuery" autocomplete="off" >
         <input type="submit" value="Search"></button>
+        <button id="reloadContacts">Reset</button>
       </form>
-      <button id="reloadContacts">Reload</button>
       <div id="flash"></div>
       <div id="contacts"></div>
       <script src="./build/app.bundle.js"></script>
