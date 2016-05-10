@@ -2,7 +2,7 @@
 * @Author: changjoopark
 * @Date:   2016-05-10 17:50:32
 * @Last Modified by:   ChangJoo Park
-* @Last Modified time: 2016-05-10 20:49:58
+* @Last Modified time: 2016-05-10 21:13:44
 */
 
 'use strict';
@@ -32,7 +32,7 @@ document.getElementById('searchForm').addEventListener('submit', (event)=> {
   service.findByName(queryText.value).then((contacts)=>{
     loadContact(contacts);
   }).catch((error)=>{
-    document.getElementById('flash').innerHTML = error.message;
+    document.getElementById('flash').innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
     queryText.value = "";
   });
 });

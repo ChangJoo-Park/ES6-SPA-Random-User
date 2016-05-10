@@ -6,15 +6,30 @@
         <link rel="stylesheet" href="./css/style.css">
     </head>
     <body>
-      <form id="searchForm">
-        <input type="text" id="searchContactQuery" autocomplete="off" >
-        <input type="submit" value="Search"></button>
-        <button id="reloadContacts">Reset</button>
-      </form>
-      <div id="flash"></div>
-      <div id="contacts"></div>
 
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-      <script src="./build/app.bundle.js"></script>
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Find Contact!</h1>
+        <p>Contact finder using ES6</p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+      </div>
+    </div>
+
+    <div class="container">
+      <form id="searchForm" class="form-inline" role="form">
+        <div class="form-group">
+          <input type="text" id="searchContactQuery" placeholder="Input name to search" class="form-control" autocomplete="off" >
+        </div>
+        <input type="submit" class="btn btn-primary" value="Search"></button>
+        <button id="reloadContacts" class="btn btn-default">Reset</button>
+      </form>
+      <br>
+      <div id="flash"></div>
+      <div id="contacts" class="row">
+      </div>
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="./build/app.bundle.js"></script>
     </body>
 </html>

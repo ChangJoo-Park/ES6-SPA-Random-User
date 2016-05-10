@@ -48,7 +48,7 @@
 	* @Author: changjoopark
 	* @Date:   2016-05-10 17:50:32
 	* @Last Modified by:   ChangJoo Park
-	* @Last Modified time: 2016-05-10 20:49:58
+	* @Last Modified time: 2016-05-10 21:13:44
 	*/
 	
 	'use strict';
@@ -88,7 +88,7 @@
 	  service.findByName(queryText.value).then(function (contacts) {
 	    loadContact(contacts);
 	  }).catch(function (error) {
-	    document.getElementById('flash').innerHTML = error.message;
+	    document.getElementById('flash').innerHTML = '<div class="alert alert-danger" role="alert">' + error.message + '</div>';
 	    queryText.value = "";
 	  });
 	});
@@ -214,8 +214,8 @@
 	/*
 	* @Author: changjoopark
 	* @Date:   2016-05-10 18:09:49
-	* @Last Modified by:   changjoopark
-	* @Last Modified time: 2016-05-10 19:35:46
+	* @Last Modified by:   ChangJoo Park
+	* @Last Modified time: 2016-05-10 21:19:48
 	*/
 	
 	'use strict';
@@ -240,7 +240,7 @@
 	    value: function domBasicProfile() {
 	      var name = this.contact.firstName + ' ' + this.contact.lastName;
 	      var age = '(' + this.contact.age + ')';
-	      return '<div class=\'basic\'>\n      <p>' + name + ' ' + age + '</p>\n    </div>';
+	      return '<h3>' + name + ' ' + age + '</h3>';
 	    }
 	  }, {
 	    key: 'domAddress',
@@ -266,7 +266,7 @@
 	      var nameDOM = this.domBasicProfile();
 	      var addressDOM = this.domAddress();
 	      var phoneDOM = this.domPhone();
-	      var html = '<div class=\'contact-' + this.contact.id + '\'>\n      ' + nameDOM + '\n      ' + addressDOM + '\n      ' + phoneDOM + '\n    </div>';
+	      var html = '<div class=\'contact-' + this.contact.id + ' col-sm-4 col-md-3\'>\n      <div class="thumbnail">\n        <img src="http://lorempixel.com/400/200/"/>\n        <div class="caption">\n          ' + nameDOM + '\n        </div>\n        ' + addressDOM + '\n        ' + phoneDOM + '\n      </div>\n    </div>';
 	      return html;
 	    }
 	  }]);

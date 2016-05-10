@@ -1,8 +1,8 @@
 /*
 * @Author: changjoopark
 * @Date:   2016-05-10 18:09:49
-* @Last Modified by:   changjoopark
-* @Last Modified time: 2016-05-10 19:35:46
+* @Last Modified by:   ChangJoo Park
+* @Last Modified time: 2016-05-10 21:19:48
 */
 
 'use strict';
@@ -16,10 +16,15 @@ export default class ContactDOM  {
     const nameDOM = this.domBasicProfile();
     const addressDOM = this.domAddress();
     const phoneDOM = this.domPhone();
-    const html = `<div class='contact-${this.contact.id}'>
-      ${nameDOM}
-      ${addressDOM}
-      ${phoneDOM}
+    const html = `<div class='contact-${this.contact.id} col-sm-4 col-md-3'>
+      <div class="thumbnail">
+        <img src="http://lorempixel.com/400/200/"/>
+        <div class="caption">
+          ${nameDOM}
+        </div>
+        ${addressDOM}
+        ${phoneDOM}
+      </div>
     </div>`;
     return html;
   }
@@ -27,9 +32,7 @@ export default class ContactDOM  {
   domBasicProfile() {
     const name = `${this.contact.firstName} ${this.contact.lastName}`;
     const age = `(${this.contact.age})`;
-    return `<div class='basic'>
-      <p>${name} ${age}</p>
-    </div>`;
+    return `<h3>${name} ${age}</h3>`;
   }
 
   domAddress() {
