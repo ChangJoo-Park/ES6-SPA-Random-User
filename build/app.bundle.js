@@ -48,7 +48,7 @@
 	* @Author: changjoopark
 	* @Date:   2016-05-10 17:50:32
 	* @Last Modified by:   ChangJoo Park
-	* @Last Modified time: 2016-05-10 20:00:16
+	* @Last Modified time: 2016-05-10 20:24:57
 	*/
 	
 	'use strict';
@@ -71,10 +71,14 @@
 	
 	//  Click Contact Reload button
 	document.getElementById('reloadContacts').addEventListener('click', function () {
+	  document.getElementById('flash').innerHTML = '';
+	  document.getElementById('searchContactQuery').value = '';
 	  loadContact();
 	});
 	
-	document.getElementById('searchContact').addEventListener('click', function () {
+	document.getElementById('searchForm').addEventListener('submit', function (event) {
+	  event.preventDefault();
+	  document.getElementById('flash').innerHTML = '';
 	  var queryText = document.getElementById('searchContactQuery');
 	  service.findByName(queryText.value).then(function (contacts) {
 	    var html = '';
@@ -83,7 +87,9 @@
 	      html += contactDOM.domObject;
 	    });
 	    document.getElementById('contacts').innerHTML = html;
-	    queryText.value = '';
+	  }).catch(function (error) {
+	    document.getElementById('flash').innerHTML = error.message;
+	    queryText.value = "";
 	  });
 	});
 	
@@ -106,7 +112,7 @@
 	* @Author: changjoopark
 	* @Date:   2016-05-10 17:57:01
 	* @Last Modified by:   ChangJoo Park
-	* @Last Modified time: 2016-05-10 20:02:36
+	* @Last Modified time: 2016-05-10 20:25:30
 	*/
 	
 	'use strict';
@@ -161,23 +167,23 @@
 	
 	var findByName = exports.findByName = function findByName(queryText) {
 	  return new Promise(function (resolve, reject) {
-	    console.log(queryText);
 	    if (queryText.trim() === '') {
 	      resolve(contacts);
 	    } else if (queryText.length > 0) {
 	      (function () {
-	        console.log('queryText has exists');
-	        var q = queryText.trim();
+	        var q = queryText.trim().toLowerCase();
 	        var result = [];
 	        contacts.forEach(function (contact) {
-	          if (contact.firstName === q || contact.lastName === q) {
+	          if (contact.firstName.toLowerCase() === q || contact.lastName.toLowerCase() === q) {
 	            result.push(contact);
 	          }
 	        });
-	        resolve(result);
+	        if (result.length > 0) {
+	          resolve(result);
+	        } else {
+	          reject({ message: "Can't find mathched : " + queryText });
+	        }
 	      })();
-	    } else {
-	      reject("No Contacts");
 	    }
 	  });
 	};

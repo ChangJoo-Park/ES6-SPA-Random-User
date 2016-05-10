@@ -2,7 +2,7 @@
 * @Author: changjoopark
 * @Date:   2016-05-10 17:57:01
 * @Last Modified by:   ChangJoo Park
-* @Last Modified time: 2016-05-10 20:02:36
+* @Last Modified time: 2016-05-10 20:25:30
 */
 
 'use strict';
@@ -62,20 +62,21 @@ export let findAll = () => new Promise((resolve, reject) => {
 });
 
 export let findByName = (queryText) => new Promise((resolve, reject) => {
-  console.log(queryText)
   if(queryText.trim() === '') {
     resolve(contacts);
   } else if(queryText.length > 0) {
-    console.log('queryText has exists');
-    const q = queryText.trim();
+    const q = queryText.trim().toLowerCase();
     let result = [];
     contacts.forEach((contact)=>{
-      if(contact.firstName === q || contact.lastName === q) {
+      if(contact.firstName.toLowerCase() === q ||
+         contact.lastName.toLowerCase() === q) {
         result.push(contact);
       }
     });
-    resolve(result);
-  } else {
-    reject("No Contacts");
+    if(result.length > 0) {
+      resolve(result);
+    } else {
+      reject({message: `Can't find mathched : ${queryText}`});
+    }
   }
 });
