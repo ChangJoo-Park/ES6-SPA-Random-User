@@ -10,7 +10,7 @@ let contacts = undefined;
 
 export let findAll = () => new Promise((resolve, reject) => {
     if(contacts === undefined) {
-      getJSON('http://api.randomuser.me/?results=25')
+      getJSON('https://randomuser.me/api?results=25')
       .then(function (data) {
         contacts = data;
         resolve(contacts.results);
