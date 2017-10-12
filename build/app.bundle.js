@@ -125,7 +125,7 @@
 	var findAll = exports.findAll = function findAll() {
 	  return new Promise(function (resolve, reject) {
 	    if (contacts === undefined) {
-	      getJSON('http://api.randomuser.me/?results=25').then(function (data) {
+	      getJSON('https://randomuser.me/api?results=25').then(function (data) {
 	        contacts = data;
 	        resolve(contacts.results);
 	      });
