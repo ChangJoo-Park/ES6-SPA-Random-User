@@ -40,9 +40,10 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/******/ ({
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
 
 	/*
 	* @Author: changjoopark
@@ -57,7 +58,7 @@
 	
 	var service = _interopRequireWildcard(_contactServiceMock);
 	
-	var _contactDom = __webpack_require__(2);
+	var _contactDom = __webpack_require__(29);
 	
 	var _contactDom2 = _interopRequireDefault(_contactDom);
 	
@@ -102,15 +103,16 @@
 	  document.getElementById('contacts').innerHTML = html;
 	};
 
-/***/ },
-/* 1 */
-/***/ function(module, exports) {
+/***/ }),
+
+/***/ 1:
+/***/ (function(module, exports) {
 
 	/*
 	* @Author: changjoopark
 	* @Date:   2016-05-10 17:57:01
 	* @Last Modified by:   ChangJoo Park
-	* @Last Modified time: 2016-05-10 21:47:29
+	* @Last Modified time: 2016-05-10 21:47:55
 	*/
 	
 	'use strict';
@@ -119,20 +121,15 @@
 	  value: true
 	});
 	var contacts = undefined;
-	// export let getContacts = ()=> new Promise((resolve, reject) => {
-	
-	// });
 	
 	var findAll = exports.findAll = function findAll() {
 	  return new Promise(function (resolve, reject) {
 	    if (contacts === undefined) {
 	      getJSON('http://api.randomuser.me/?results=25').then(function (data) {
-	        console.log(data);
 	        contacts = data;
 	        resolve(contacts.results);
 	      });
 	    } else {
-	      console.log("Hi");
 	      if (contacts) {
 	        resolve(contacts.results);
 	      } else {
@@ -147,48 +144,45 @@
 	    if (queryText.trim() === '') {
 	      resolve(contacts.results);
 	    } else if (queryText.length > 0) {
-	      (function () {
-	        var q = queryText.trim().toLowerCase();
-	        var result = [];
-	        contacts.results.forEach(function (contact) {
-	          if (contact.name.first.toLowerCase().match(q) || contact.name.last.toLowerCase().match(q)) {
-	            result.push(contact);
-	          }
-	        });
-	        if (result.length > 0) {
-	          resolve(result);
-	        } else {
-	          reject({
-	            message: 'Can\'t find mathched : ' + queryText
-	          });
+	      var q = queryText.trim().toLowerCase();
+	      var result = [];
+	      contacts.results.forEach(function (contact) {
+	        if (contact.name.first.toLowerCase().match(q) || contact.name.last.toLowerCase().match(q)) {
+	          result.push(contact);
 	        }
-	      })();
+	      });
+	      if (result.length > 0) {
+	        resolve(result);
+	      } else {
+	        reject({
+	          message: 'Can\'t find mathched : ' + queryText
+	        });
+	      }
 	    }
 	  });
 	};
 	
 	function getJSON(url) {
-	  'use strict';
-	
-	  var xhr = new XMLHttpRequest();
-	  var d = Promise.defer();
-	  xhr.onreadystatechange = function () {
-	    if (xhr.readyState === 4) {
-	      if (xhr.status === 200) {
-	        d.resolve(JSON.parse(xhr.responseText));
-	      } else {
-	        d.reject(xhr.responseText);
+	  return new Promise(function (resolve, reject) {
+	    var xhr = new XMLHttpRequest();
+	    xhr.onreadystatechange = function () {
+	      if (xhr.readyState === 4) {
+	        if (xhr.status === 200) {
+	          resolve(JSON.parse(xhr.responseText));
+	        } else {
+	          reject(xhr.responseText);
+	        }
 	      }
-	    }
-	  };
-	  xhr.open('GET', url);
-	  xhr.send();
-	  return d.promise;
+	    };
+	    xhr.open('GET', url);
+	    xhr.send();
+	  });
 	}
 
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
+/***/ }),
+
+/***/ 29:
+/***/ (function(module, exports) {
 
 	/*
 	* @Author: changjoopark
@@ -256,6 +250,7 @@
 	
 	exports.default = ContactDOM;
 
-/***/ }
-/******/ ]);
+/***/ })
+
+/******/ });
 //# sourceMappingURL=app.bundle.js.map
