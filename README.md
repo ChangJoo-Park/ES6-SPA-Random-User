@@ -13,6 +13,7 @@ npm start
 
 - Beautify :lipstick:
 - Refactoring soruces :sob:
+- Test
 - Instant Search using loaded data 
 - Load more :heavy_plus_sign: 
 - Sort by name, city
