@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "babel": "babel js/main.js --presets es2015 -o build/main.bundle.js",
     "start": "http-server",
-    "webpack": "webpack"
+    "dev": "webpack-dev-server"
   },
   "author": "",
   "license": "MIT",
