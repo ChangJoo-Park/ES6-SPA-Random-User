@@ -6,14 +6,12 @@
 */
 
 'use strict';
-
 let contacts = undefined;
 
 export let findAll = () => new Promise((resolve, reject) => {
     if(contacts === undefined) {
       getJSON('http://api.randomuser.me/?results=25')
       .then(function (data) {
-        console.log(data);
         contacts = data;
         resolve(contacts.results);
       });
@@ -50,19 +48,18 @@ export let findByName = (queryText) => new Promise((resolve, reject) => {
 
 
 function getJSON(url) {
-  'use strict';
-  var xhr = new XMLHttpRequest();
-  var d = Promise.defer();
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        d.resolve(JSON.parse(xhr.responseText));
-      } else {
-        d.reject(xhr.responseText);
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(xhr.responseText);
+        }
       }
-    }
-  };
-  xhr.open('GET', url);
-  xhr.send();
-  return d.promise;
+    };
+    xhr.open('GET', url);
+    xhr.send();  
+  })
 }
