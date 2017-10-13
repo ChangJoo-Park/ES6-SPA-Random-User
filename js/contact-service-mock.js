@@ -5,61 +5,59 @@
 * @Last Modified time: 2016-05-10 21:47:55
 */
 
-'use strict';
 let contacts = undefined;
+const DATA_URL = 'https://randomuser.me/api?result=25';
 
-export let findAll = () => new Promise((resolve, reject) => {
-  if (contacts === undefined) {
-    getJSON('https://randomuser.me/api?results=25')
-      .then(function (data) {
-        contacts = data;
-        resolve(contacts.results);
-      });
-  } else {
-    if (contacts) {
-      resolve(contacts.results);
-    } else {
-      reject("No Contacts");
+const t = str => str.trim();
+const tlc = str => t(str).toLowerCase();
+const tm = (str, q) => tlc(str).match(q);
+
+const getJSON = url => new Promise((resolve, reject) => {
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = _ => {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        reject(xhr.responseText);
+      }
     }
+  };
+  xhr.open('GET', url);
+  xhr.send();
+});
+
+export const findAll = () => new Promise((resolve, reject) => {
+  if (contacts === undefined) {
+    getJSON(DATA_URL).then(data => {
+      contacts = data;
+      resolve(contacts.results);
+    });
+  } else {
+    contacts ?
+      resolve(contacts.results) :
+      reject('No Contacts');
   }
 });
 
-export let findByName = (queryText) => new Promise((resolve, reject) => {
-  if (queryText.trim() === '') {
+export const findByName = queryText => new Promise((resolve, reject) => {
+  if (t(queryText) === '') {
     resolve(contacts.results);
   } else if (queryText.length > 0) {
-    const q = queryText.trim().toLowerCase();
-    let result = [];
-    contacts.results.forEach((contact) => {
-      if (contact.name.first.toLowerCase().match(q) ||
-        contact.name.last.toLowerCase().match(q)) {
-        result.push(contact);
+    const q = tlc(queryText);
+    const result = contacts.results.reduce((p, contact) => {
+      const {first, last} = contact.name;
+      if (tm(first, q) || tm(last, q)) {
+        p.push(contact);
       }
-    });
+
+      return p;
+    }, []);
+
     if (result.length > 0) {
       resolve(result);
     } else {
-      reject({
-        message: `Can't find mathched : ${queryText}`
-      });
+      reject({message: `Can't find matched : ${queryText}`});
     }
   }
 });
-
-
-function getJSON(url) {
-  return new Promise((resolve, reject) => {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          resolve(JSON.parse(xhr.responseText));
-        } else {
-          reject(xhr.responseText);
-        }
-      }
-    };
-    xhr.open('GET', url);
-    xhr.send();
-  })
-}
