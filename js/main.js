@@ -10,28 +10,28 @@ import * as service from './contact-service-mock';
 import ContactDOM from './contact-dom';
 
 document.addEventListener('DOMContentLoaded', function () {
-  service.findAll().then((contacts)=>{
+  service.findAll().then((contacts) => {
     loadContact(contacts);
   });
 });
 
 //  Click Contact Reload button
-document.getElementById('reloadContacts').addEventListener('click', ()=> {
+document.getElementById('reloadContacts').addEventListener('click', () => {
   document.getElementById('flash').innerHTML = '';
   document.getElementById('searchContactQuery').value = '';
-  service.findAll().then((contacts)=>{
+  service.findAll().then((contacts) => {
     loadContact(contacts);
   });
 });
 
-document.getElementById('searchForm').addEventListener('submit', (event)=> {
+document.getElementById('searchForm').addEventListener('submit', (event) => {
   event.preventDefault();
   document.getElementById('flash').innerHTML = '';
 
   const queryText = document.getElementById('searchContactQuery');
-  service.findByName(queryText.value).then((contacts)=>{
+  service.findByName(queryText.value).then((contacts) => {
     loadContact(contacts);
-  }).catch((error)=>{
+  }).catch((error) => {
     document.getElementById('flash').innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
     queryText.value = "";
   });
@@ -39,7 +39,7 @@ document.getElementById('searchForm').addEventListener('submit', (event)=> {
 
 function loadContact(contacts) {
   let html = '';
-  contacts.forEach((contact)=>{
+  contacts.forEach((contact) => {
     let contactDOM = new ContactDOM(contact);
     html += contactDOM.domObject;
   });

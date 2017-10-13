@@ -9,42 +9,42 @@
 let contacts = undefined;
 
 export let findAll = () => new Promise((resolve, reject) => {
-    if(contacts === undefined) {
-      getJSON('https://randomuser.me/api?results=25')
+  if (contacts === undefined) {
+    getJSON('https://randomuser.me/api?results=25')
       .then(function (data) {
         contacts = data;
         resolve(contacts.results);
       });
+  } else {
+    if (contacts) {
+      resolve(contacts.results);
     } else {
-      if (contacts) {
-        resolve(contacts.results);
-      } else {
-        reject("No Contacts");
-      }
+      reject("No Contacts");
     }
-  });
+  }
+});
 
 export let findByName = (queryText) => new Promise((resolve, reject) => {
-    if (queryText.trim() === '') {
-      resolve(contacts.results);
-    } else if (queryText.length > 0) {
-      const q = queryText.trim().toLowerCase();
-      let result = [];
-      contacts.results.forEach((contact) => {
-        if (contact.name.first.toLowerCase().match(q) ||
-          contact.name.last.toLowerCase().match(q)) {
-          result.push(contact);
-        }
-      });
-      if (result.length > 0) {
-        resolve(result);
-      } else {
-        reject({
-          message: `Can't find mathched : ${queryText}`
-        });
+  if (queryText.trim() === '') {
+    resolve(contacts.results);
+  } else if (queryText.length > 0) {
+    const q = queryText.trim().toLowerCase();
+    let result = [];
+    contacts.results.forEach((contact) => {
+      if (contact.name.first.toLowerCase().match(q) ||
+        contact.name.last.toLowerCase().match(q)) {
+        result.push(contact);
       }
+    });
+    if (result.length > 0) {
+      resolve(result);
+    } else {
+      reject({
+        message: `Can't find mathched : ${queryText}`
+      });
     }
-  });
+  }
+});
 
 
 function getJSON(url) {
@@ -60,6 +60,6 @@ function getJSON(url) {
       }
     };
     xhr.open('GET', url);
-    xhr.send();  
+    xhr.send();
   })
 }

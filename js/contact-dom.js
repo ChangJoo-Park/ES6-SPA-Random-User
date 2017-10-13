@@ -7,7 +7,7 @@
 
 'use strict';
 
-export default class ContactDOM  {
+export default class ContactDOM {
   constructor(contact) {
     this.contact = contact;
   }
@@ -46,10 +46,10 @@ export default class ContactDOM  {
 
   domPhone() {
     let phones = [];
-    phones.push({type: 'phone', number: this.contact.phone });
-    phones.push({type: 'cell', number: this.contact.cell });
+    phones.push({type: 'phone', number: this.contact.phone});
+    phones.push({type: 'cell', number: this.contact.cell});
     let html = '<div class="phones"><ul>';
-    phones.forEach((phone)=>{
+    phones.forEach((phone) => {
       var dom = `<li>${phone.type} : ${phone.number}</li>`;
       html += dom;
     });
